@@ -1,0 +1,459 @@
+[33mcommit 18598adb2315fe43f454dcaab415dc6d485b4a2d[m[33m ([m[1;36mHEAD -> [m[1;32mmanual-local-auth[m[33m, [m[1;31morigin/main[m[33m, [m[1;32mmain[m[33m)[m
+Author: chaitu1969 <chaitanya.karle@gmail.com>
+Date:   Tue Oct 10 22:32:35 2023 +0530
+
+    initial commit
+
+[1mdiff --git a/.gitignore b/.gitignore[m
+[1mnew file mode 100644[m
+[1mindex 0000000..40b878d[m
+[1m--- /dev/null[m
+[1m+++ b/.gitignore[m
+[36m@@ -0,0 +1 @@[m
+[32m+[m[32mnode_modules/[m
+\ No newline at end of file[m
+[1mdiff --git a/assets/css/layout.css b/assets/css/layout.css[m
+[1mnew file mode 100644[m
+[1mindex 0000000..b3956c2[m
+[1m--- /dev/null[m
+[1m+++ b/assets/css/layout.css[m
+[36m@@ -0,0 +1,5 @@[m
+[32m+[m[32mbody {[m
+[32m+[m[32m  margin: 0px;[m
+[32m+[m[32m  text-align: center;[m
+[32m+[m[32m  background-color: rgb(244, 239, 218);[m
+[32m+[m[32m}[m
+[1mdiff --git a/assets/css/user_profile.css b/assets/css/user_profile.css[m
+[1mnew file mode 100644[m
+[1mindex 0000000..08c7f27[m
+[1m--- /dev/null[m
+[1m+++ b/assets/css/user_profile.css[m
+[36m@@ -0,0 +1,4 @@[m
+[32m+[m[32mbody {[m
+[32m+[m[32m  background-color: lightslategray;[m
+[32m+[m[32m  margin: 0;[m
+[32m+[m[32m}[m
+[1mdiff --git a/config/mongoose.js b/config/mongoose.js[m
+[1mnew file mode 100644[m
+[1mindex 0000000..b42d87d[m
+[1m--- /dev/null[m
+[1m+++ b/config/mongoose.js[m
+[36m@@ -0,0 +1,11 @@[m
+[32m+[m[32mconst mongoose = require('mongoose');[m
+[32m+[m
+[32m+[m[32mmongoose.connect('mongodb://localhost/codieal');[m
+[32m+[m
+[32m+[m[32mconst db = mongoose.connection;[m
+[32m+[m
+[32m+[m[32mdb.on('error', console.error.bind(console, "Error has been generated on connection"));[m
+[32m+[m
+[32m+[m[32mdb.once('open', () => {[m
+[32m+[m[32m    console.log("Sucessfully connected to DB");[m
+[32m+[m[32m})[m
+\ No newline at end of file[m
+[1mdiff --git a/controllers/home_controller.js b/controllers/home_controller.js[m
+[1mnew file mode 100644[m
+[1mindex 0000000..a271bfb[m
+[1m--- /dev/null[m
+[1m+++ b/controllers/home_controller.js[m
+[36m@@ -0,0 +1,10 @@[m
+[32m+[m[32mmodule.exports.home = function (req, res) {[m
+[32m+[m[41m    [m
+[32m+[m[32m    console.log(req.cookies);[m
+[32m+[m[32m    res.cookie('user_id', 25);[m
+[32m+[m[32m    return res.render('home', {[m
+[32m+[m[32m        title: "Home"[m
+[32m+[m[32m    });[m
+[32m+[m[32m}[m
+[32m+[m
+[32m+[m[32m// module.exports.actionName = function(req, res){}[m
+\ No newline at end of file[m
+[1mdiff --git a/controllers/users_controller.js b/controllers/users_controller.js[m
+[1mnew file mode 100644[m
+[1mindex 0000000..7e500d8[m
+[1m--- /dev/null[m
+[1m+++ b/controllers/users_controller.js[m
+[36m@@ -0,0 +1,104 @@[m
+[32m+[m[32mconst user = require("../models/user");[m
+[32m+[m[32mconst { use } = require("../routes");[m
+[32m+[m
+[32m+[m[32mmodule.exports.profile = function (req, res) {[m
+[32m+[m[32m  return res.render("user_profile", {[m
+[32m+[m[32m    title: "User Profile",[m
+[32m+[m[32m  });[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32m// Render the sign in page[m
+[32m+[m[32mmodule.exports.signin = function (req, res) {[m
+[32m+[m[32m  return res.render("user_sign_in", {[m
+[32m+[m[32m    title: "codieal | sign in",[m
+[32m+[m[32m  });[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32m// render the sign up page[m
+[32m+[m
+[32m+[m[32mmodule.exports.signUp = function (req, res) {[m
+[32m+[m[32m  return res.render("user_sign_up", {[m
+[32m+[m[32m    title: "Codieal | sign Up",[m
+[32m+[m[32m  });[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32m// get the signup data[m
+[32m+[m
+[32m+[m[32mmodule.exports.create = function (req, res) {[m
+[32m+[m[32m  // Todo[m
+[32m+[m
+[32m+[m[32m  if (req.body.password != req.body.confirm_password) {[m
+[32m+[m[32m    return res.redirect("back");[m
+[32m+[m[32m  }[m
+[32m+[m[41m    [m
+[32m+[m[32m    user.create(req.body); {[m
+[32m+[m[32m        return res.redirect('/users/sign-in');[m
+[32m+[m[32m    };[m
+[32m+[m
+[32m+[m[32m//   user.create(req.body, (err, user) => {[m
+[32m+[m[32m//     if (err) {[m
+[32m+[m[32m//       console.log(err);[m
+[32m+[m[32m//       return;[m
+[32m+[m[32m//     }[m
+[32m+[m[32m//     return res.redirect("/users/sign-in");[m
+[32m+[m[32m//   });[m
+[32m+[m
+[32m+[m[32m  // if (!user) {[m
+[32m+[m[32m  //     user.create(req.body, function (err, user) {[m
+[32m+[m[32m  //         if (err) {[m
+[32m+[m[32m  //             console.log("error ");[m
+[32m+[m[32m  //             return;[m
+[32m+[m[32m  //         }[m
+[32m+[m[32m  //         return res.redirect('/users/sign-in');[m
+[32m+[m[32m  //     })[m
+[32m+[m[32m  // }[m
+[32m+[m
+[32m+[m[32m  //   user.findOne({ email: req.body.email },  (err, user) => {[m
+[32m+[m[32m  //     if (err) {[m
+[32m+[m[32m  //       console.log("error in creating user while singing up");[m
+[32m+[m[32m  //       return;[m
+[32m+[m[32m  //     }[m
+[32m+[m
+[32m+[m[32m  //     if (!user) {[m
+[32m+[m[32m  //       user.create(req.body, function (err, user) {[m
+[32m+[m[32m  //         if (err) {[m
+[32m+[m[32m  //           console.log("error in creating user while singing up");[m
+[32m+[m[32m  //           return;[m
+[32m+[m[32m  //         }[m
+[32m+[m
+[32m+[m[32m  //         return res.redirect("/users/sign-in");[m
+[32m+[m[32m  //       });[m
+[32m+[m[32m  //     } else {[m
+[32m+[m[32m  //       return res.redirect("back");[m
+[32m+[m[32m  //     }[m
+[32m+[m[32m  //   });[m
+[32m+[m
+[32m+[m[32m  //   User.findOne([m
+[32m+[m[32m  //     {[m
+[32m+[m[32m  //       email: req.body.email,[m
+[32m+[m[32m  //     },[m
+[32m+[m[32m  //     function (err, user) {[m
+[32m+[m[32m  //       if (err) {[m
+[32m+[m[32m  //         console.log("error in finding user in signing up");[m
+[32m+[m[32m  //         return;[m
+[32m+[m[32m  //       }[m
+[32m+[m
+[32m+[m[32m  //       if (!user) {[m
+[32m+[m[32m  //         user.create(req.body, function (err, user) {[m
+[32m+[m[32m  //           if (err) {[m
+[32m+[m[32m  //             console.log("error whie creating singup");[m
+[32m+[m[32m  //             return;[m
+[32m+[m[32m  //           }[m
+[32m+[m[32m  //             return res.redirect('/users/sign-in');[m
+[32m+[m[32m  //         });[m
+[32m+[m[32m  //       } else {[m
+[32m+[m[32m  //         return res.redirect('back');[m
+[32m+[m[32m  //       }[m
+[32m+[m[32m  //     }[m
+[32m+[m[32m  //   );[m
+[32m+[m[32m};[m
+[32m+[m
+[32m+[m[32m// Sign In for create session[m
+[32m+[m[32mmodule.exports.createSession = function (req, res) {[m
+[32m+[m[41m    [m
+[32m+[m[32m};[m
+[1mdiff --git a/index.js b/index.js[m
+[1mnew file mode 100644[m
+[1mindex 0000000..b4bf985[m
+[1m--- /dev/null[m
+[1m+++ b/index.js[m
+[36m@@ -0,0 +1,34 @@[m
+[32m+[m[32mconst express = require("express");[m
+[32m+[m[32mconst app = express();[m
+[32m+[m[32mconst port = 8000;[m
+[32m+[m[32mconst expressLayout = require("express-ejs-layouts");[m
+[32m+[m[32mconst db = require('./config/mongoose');[m
+[32m+[m[32mconst cookieparser = require('cookie-parser');[m
+[32m+[m
+[32m+[m
+[32m+[m[32mapp.use(express.urlencoded());[m
+[32m+[m[32mapp.use(cookieparser());[m
+[32m+[m
+[32m+[m[32mapp.use(expressLayout);[m
+[32m+[m
+[32m+[m[32mapp.use(express.static('./assets'));[m
+[32m+[m
+[32m+[m[32m//extracting scripts and styles[m
+[32m+[m
+[32m+[m[32mapp.set('layout extractStyles', true);[m
+[32m+[m[32mapp.set('layout extractScript', true);[m
+[32m+[m
+[32m+[m[32m// use express router[m
+[32m+[m[32mapp.use("/", require("./routes"));[m
+[32m+[m
+[32m+[m[32m// set up the view engine[m
+[32m+[m[32mapp.set("view engine", "ejs");[m
+[32m+[m[32mapp.set("views", "./views");[m
+[32m+[m
+[32m+[m[32mapp.listen(port, function (err) {[m
+[32m+[m[32m  if (err) {[m
+[32m+[m[32m    console.log(`Error in running the server: ${err}`);[m
+[32m+[m[32m  }[m
+[32m+[m
+[32m+[m[32m  console.log(`Server is running on port: ${port}`);[m
+[32m+[m[32m});[m
+[1mdiff --git a/models/user.js b/models/user.js[m
+[1mnew file mode 100644[m
+[1mindex 0000000..a0914a3[m
+[1m--- /dev/null[m
+[1m+++ b/models/user.js[m
+[36m@@ -0,0 +1,23 @@[m
+[32m+[m[32mconst mongoose = require('mongoose');[m
+[32m+[m
+[32m+[m[32mconst userSchema = new mongoose.Schema({[m
+[32m+[m[32m    email: {[m
+[32m+[m[32m        type: String,[m
+[32m+[m[32m        require: true,[m
+[32m+[m[32m        unique: true[m
+[32m+[m[32m    },[m
+[32m+[m[32m    password: {[m
+[32m+[m[32m        type: String,[m
+[32m+[m[32m        require: true[m
+[32m+[m[32m    },[m
+[32m+[m[32m    name: {[m
+[32m+[m[32m        type: String,[m
+[32m+[m[32m        require: true[m
+[32m+[m[32m    }[m
+[32m+[m[32m}, {[m
+[32m+[m[32m    timestamps: true[m
+[32m+[m[32m});[m
+[32m+[m
+[32m+[m[32mconst user = mongoose.model('User', userSchema);[m
+[32m+[m
+[32m+[m[32mmodule.exports = user;[m
+\ No newline at end of file[m
+[1mdiff --git a/package-lock.json b/package-lock.json[m
+[1mnew file mode 100644[m
+[1mindex 0000000..7e60012[m
+[1m--- /dev/null[m
+[1m+++ b/package-lock.json[m
+[36m@@ -0,0 +1,1281 @@[m
+[32m+[m[32m{[m
+[32m+[m[32m  "name": "codeial",[m
+[32m+[m[32m  "version": "1.0.0",[m
+[32m+[m[32m  "lockfileVersion": 3,[m
+[32m+[m[32m  "requires": true,[m
+[32m+[m[32m  "packages": {[m
+[32m+[m[32m    "": {[m
+[32m+[m[32m      "name": "codeial",[m
+[32m+[m[32m      "version": "1.0.0",[m
+[32m+[m[32m      "license": "ISC",[m
+[32m+[m[32m      "dependencies": {[m
+[32m+[m[32m        "cookie-parser": "^1.4.6",[m
+[32m+[m[32m        "ejs": "^2.6.1",[m
+[32m+[m[32m        "express": "^4.18.2",[m
+[32m+[m[32m        "express-ejs-layouts": "^2.5.1",[m
+[32m+[m[32m        "mongodb": "^6.1.0",[m
+[32m+[m[32m        "mongoose": "^7.6.0",[m
+[32m+[m[32m        "nodemon": "^3.0.1"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/@mongodb-js/saslprep": {[m
+[32m+[m[32m      "version": "1.1.0",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@mongodb-js/saslprep/-/saslprep-1.1.0.tgz",[m
+[32m+[m[32m      "integrity": "sha512-Xfijy7HvfzzqiOAhAepF4SGN5e9leLkMvg/OPOF97XemjfVCYN/oWa75wnkc6mltMSTwY+XlbhWgUOJmkFspSw==",[m
+[32m+[m[32m      "dependencies": {[m
+[32m+[m[32m        "sparse-bitfield": "^3.0.3"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/@types/node": {[m
+[32m+[m[32m      "version": "20.8.3",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@types/node/-/node-20.8.3.tgz",[m
+[32m+[m[32m      "integrity": "sha512-jxiZQFpb+NlH5kjW49vXxvxTjeeqlbsnTAdBTKpzEdPs9itay7MscYXz3Fo9VYFEsfQ6LJFitHad3faerLAjCw=="[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/@types/webidl-conversions": {[m
+[32m+[m[32m      "version": "7.0.1",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@types/webidl-conversions/-/webidl-conversions-7.0.1.tgz",[m
+[32m+[m[32m      "integrity": "sha512-8hKOnOan+Uu+NgMaCouhg3cT9x5fFZ92Jwf+uDLXLu/MFRbXxlWwGeQY7KVHkeSft6RvY+tdxklUBuyY9eIEKg=="[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/@types/whatwg-url": {[m
+[32m+[m[32m      "version": "8.2.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/@types/whatwg-url/-/whatwg-url-8.2.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-FtQu10RWgn3D9U4aazdwIE2yzphmTJREDqNdODHrbrZmmMqI0vMheC/6NE/J1Yveaj8H+ela+YwWTjq5PGmuhA==",[m
+[32m+[m[32m      "dependencies": {[m
+[32m+[m[32m        "@types/node": "*",[m
+[32m+[m[32m        "@types/webidl-conversions": "*"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/abbrev": {[m
+[32m+[m[32m      "version": "1.1.1",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/abbrev/-/abbrev-1.1.1.tgz",[m
+[32m+[m[32m      "integrity": "sha512-nne9/IiQ/hzIhY6pdDnbBtz7DjPTKrY00P/zvPSm5pOFkl6xuGrGnXn/VtTNNfNtAfZ9/1RtehkszU9qcTii0Q=="[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/accepts": {[m
+[32m+[m[32m      "version": "1.3.8",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/accepts/-/accepts-1.3.8.tgz",[m
+[32m+[m[32m      "integrity": "sha512-PYAthTa2m2VKxuvSD3DPC/Gy+U+sOA1LAuT8mkmRuvw+NACSaeXEQ+NHcVF7rONl6qcaxV3Uuemwawk+7+SJLw==",[m
+[32m+[m[32m      "dependencies": {[m
+[32m+[m[32m        "mime-types": "~2.1.34",[m
+[32m+[m[32m        "negotiator": "0.6.3"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "engines": {[m
+[32m+[m[32m        "node": ">= 0.6"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/anymatch": {[m
+[32m+[m[32m      "version": "3.1.3",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/anymatch/-/anymatch-3.1.3.tgz",[m
+[32m+[m[32m      "integrity": "sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==",[m
+[32m+[m[32m      "dependencies": {[m
+[32m+[m[32m        "normalize-path": "^3.0.0",[m
+[32m+[m[32m        "picomatch": "^2.0.4"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "engines": {[m
+[32m+[m[32m        "node": ">= 8"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/array-flatten": {[m
+[32m+[m[32m      "version": "1.1.1",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/array-flatten/-/array-flatten-1.1.1.tgz",[m
+[32m+[m[32m      "integrity": "sha1-ml9pkFGx5wczKPKgCJaLZOopVdI="[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/balanced-match": {[m
+[32m+[m[32m      "version": "1.0.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/balanced-match/-/balanced-match-1.0.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-3oSeUO0TMV67hN1AmbXsK4yaqU7tjiHlbxRDZOpH0KW9+CeX4bRAaX0Anxt0tx2MrpRpWwQaPwIlISEJhYU5Pw=="[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/binary-extensions": {[m
+[32m+[m[32m      "version": "2.2.0",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/binary-extensions/-/binary-extensions-2.2.0.tgz",[m
+[32m+[m[32m      "integrity": "sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==",[m
+[32m+[m[32m      "engines": {[m
+[32m+[m[32m        "node": ">=8"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/body-parser": {[m
+[32m+[m[32m      "version": "1.20.1",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/body-parser/-/body-parser-1.20.1.tgz",[m
+[32m+[m[32m      "integrity": "sha512-jWi7abTbYwajOytWCQc37VulmWiRae5RyTpaCyDcS5/lMdtwSz5lOpDE67srw/HYe35f1z3fDQw+3txg7gNtWw==",[m
+[32m+[m[32m      "dependencies": {[m
+[32m+[m[32m        "bytes": "3.1.2",[m
+[32m+[m[32m        "content-type": "~1.0.4",[m
+[32m+[m[32m        "debug": "2.6.9",[m
+[32m+[m[32m        "depd": "2.0.0",[m
+[32m+[m[32m        "destroy": "1.2.0",[m
+[32m+[m[32m        "http-errors": "2.0.0",[m
+[32m+[m[32m        "iconv-lite": "0.4.24",[m
+[32m+[m[32m        "on-finished": "2.4.1",[m
+[32m+[m[32m        "qs": "6.11.0",[m
+[32m+[m[32m        "raw-body": "2.5.1",[m
+[32m+[m[32m        "type-is": "~1.6.18",[m
+[32m+[m[32m        "unpipe": "1.0.0"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "engines": {[m
+[32m+[m[32m        "node": ">= 0.8",[m
+[32m+[m[32m        "npm": "1.2.8000 || >= 1.4.16"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/brace-expansion": {[m
+[32m+[m[32m      "version": "1.1.11",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/brace-expansion/-/brace-expansion-1.1.11.tgz",[m
+[32m+[m[32m      "integrity": "sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==",[m
+[32m+[m[32m      "dependencies": {[m
+[32m+[m[32m        "balanced-match": "^1.0.0",[m
+[32m+[m[32m        "concat-map": "0.0.1"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/braces": {[m
+[32m+[m[32m      "version": "3.0.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/braces/-/braces-3.0.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-b8um+L1RzM3WDSzvhm6gIz1yfTbBt6YTlcEKAvsmqCZZFw46z626lVj9j1yEPW33H5H+lBQpZMP1k8l+78Ha0A==",[m
+[32m+[m[32m      "dependencies": {[m
+[32m+[m[32m        "fill-range": "^7.0.1"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "engines": {[m
+[32m+[m[32m        "node": ">=8"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/bson": {[m
+[32m+[m[32m      "version": "5.5.0",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/bson/-/bson-5.5.0.tgz",[m
+[32m+[m[32m      "integrity": "sha512-B+QB4YmDx9RStKv8LLSl/aVIEV3nYJc3cJNNTK2Cd1TL+7P+cNpw9mAPeCgc5K+j01Dv6sxUzcITXDx7ZU3F0w==",[m
+[32m+[m[32m      "engines": {[m
+[32m+[m[32m        "node": ">=14.20.1"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/bytes": {[m
+[32m+[m[32m      "version": "3.1.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/bytes/-/bytes-3.1.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-/Nf7TyzTx6S3yRJObOAV7956r8cr2+Oj8AC5dt8wSP3BQAoeX58NoHyCU8P8zGkNXStjTSi6fzO6F0pBdcYbEg==",[m
+[32m+[m[32m      "engines": {[m
+[32m+[m[32m        "node": ">= 0.8"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/call-bind": {[m
+[32m+[m[32m      "version": "1.0.2",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/call-bind/-/call-bind-1.0.2.tgz",[m
+[32m+[m[32m      "integrity": "sha512-7O+FbCihrB5WGbFYesctwmTKae6rOiIzmz1icreWJ+0aA7LJfuqhEso2T9ncpcFtzMQtzXf2QGGueWJGTYsqrA==",[m
+[32m+[m[32m      "dependencies": {[m
+[32m+[m[32m        "function-bind": "^1.1.1",[m
+[32m+[m[32m        "get-intrinsic": "^1.0.2"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "funding": {[m
+[32m+[m[32m        "url": "https://github.com/sponsors/ljharb"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/chokidar": {[m
+[32m+[m[32m      "version": "3.5.3",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/chokidar/-/chokidar-3.5.3.tgz",[m
+[32m+[m[32m      "integrity": "sha512-Dr3sfKRP6oTcjf2JmUmFJfeVMvXBdegxB0iVQ5eb2V10uFJUCAS8OByZdVAyVb8xXNz3GjjTgj9kLWsZTqE6kw==",[m
+[32m+[m[32m      "funding": [[m
+[32m+[m[32m        {[m
+[32m+[m[32m          "type": "individual",[m
+[32m+[m[32m          "url": "https://paulmillr.com/funding/"[m
+[32m+[m[32m        }[m
+[32m+[m[32m      ],[m
+[32m+[m[32m      "dependencies": {[m
+[32m+[m[32m        "anymatch": "~3.1.2",[m
+[32m+[m[32m        "braces": "~3.0.2",[m
+[32m+[m[32m        "glob-parent": "~5.1.2",[m
+[32m+[m[32m        "is-binary-path": "~2.1.0",[m
+[32m+[m[32m        "is-glob": "~4.0.1",[m
+[32m+[m[32m        "normalize-path": "~3.0.0",[m
+[32m+[m[32m        "readdirp": "~3.6.0"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "engines": {[m
+[32m+[m[32m        "node": ">= 8.10.0"[m
+[32m+[m[32m      },[m
+[32m+[m[32m      "optionalDependencies": {[m
+[32m+[m[32m        "fsevents": "~2.3.2"[m
+[32m+[m[32m      }[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/concat-map": {[m
+[32m+[m[32m      "version": "0.0.1",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/concat-map/-/concat-map-0.0.1.tgz",[m
+[32m+[m[32m      "integrity": "sha512-/Srv4dswyQNBfohGpz9o6Yb3Gz3SrUDqBH5rTuhGR7ahtlbYKnVxw2bCFMRljaA7EXHaXZ8wsHdodFvbkhKmqg=="[m
+[32m+[m[32m    },[m
+[32m+[m[32m    "node_modules/content-disposition": {[m
+[32m+[m[32m      "version": "0.5.4",[m
+[32m+[m[32m      "resolved": "https://registry.npmjs.org/content-disposition/-/content-disposition-0.5.4.tgz",[m
+[32m+[m[32m      "integrity": "sha512-FveZTNuGw04cxlAiWbzi6zTAL/lhehaWbTtgluJh4/E95DqMwTmha3KZN1aAWA8cFIhHzMZUvLevkw5Rqk+tSQ==",[m
+[32m+[m[32m      "dependencies": {[m
+[32m+[m[32m        "safe-buffer": "5.2.1"[m
+[32m+[m[32

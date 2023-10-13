@@ -1,5 +1,6 @@
-const user = require("../models/user");
-const { use } = require("../routes");
+const { model } = require("mongoose");
+const User = require("../models/user");
+// const { use } = require("../routes");
 
 module.exports.profile = function (req, res) {
   return res.render("user_profile", {
@@ -9,6 +10,10 @@ module.exports.profile = function (req, res) {
 
 // Render the sign in page
 module.exports.signin = function (req, res) {
+  if (req.isAuthenticated()) {
+    return res.redirect("/users/profile");
+  }
+  //
   return res.render("user_sign_in", {
     title: "codieal | sign in",
   });
@@ -17,6 +22,10 @@ module.exports.signin = function (req, res) {
 // render the sign up page
 
 module.exports.signUp = function (req, res) {
+  if (req.isAuthenticated()) {
+    return res.redirect("/users/profile");
+  }
+
   return res.render("user_sign_up", {
     title: "Codieal | sign Up",
   });
@@ -25,80 +34,62 @@ module.exports.signUp = function (req, res) {
 // get the signup data
 
 module.exports.create = function (req, res) {
-  // Todo
-
   if (req.body.password != req.body.confirm_password) {
     return res.redirect("back");
   }
-    
-    user.create(req.body); {
-        return res.redirect('/users/sign-in');
-    };
+  // Todo
 
-//   user.create(req.body, (err, user) => {
-//     if (err) {
-//       console.log(err);
-//       return;
-//     }
-//     return res.redirect("/users/sign-in");
-//   });
+  User.findOne({ email: req.body.email }, function (err, user) {
+    if (err) {
+      console.log("error in creating user while singing up");
+      return;
+    }
 
-  // if (!user) {
-  //     user.create(req.body, function (err, user) {
-  //         if (err) {
-  //             console.log("error ");
-  //             return;
-  //         }
-  //         return res.redirect('/users/sign-in');
-  //     })
-  // }
+    if (!user) {
+      User.create(req.body, function (err, user) {
+        if (err) {
+          console.log("error in creating user while singing up");
+          return;
+        }
 
-  //   user.findOne({ email: req.body.email },  (err, user) => {
-  //     if (err) {
-  //       console.log("error in creating user while singing up");
-  //       return;
-  //     }
-
-  //     if (!user) {
-  //       user.create(req.body, function (err, user) {
-  //         if (err) {
-  //           console.log("error in creating user while singing up");
-  //           return;
-  //         }
-
-  //         return res.redirect("/users/sign-in");
-  //       });
-  //     } else {
-  //       return res.redirect("back");
-  //     }
-  //   });
-
-  //   User.findOne(
-  //     {
-  //       email: req.body.email,
-  //     },
-  //     function (err, user) {
-  //       if (err) {
-  //         console.log("error in finding user in signing up");
-  //         return;
-  //       }
-
-  //       if (!user) {
-  //         user.create(req.body, function (err, user) {
-  //           if (err) {
-  //             console.log("error whie creating singup");
-  //             return;
-  //           }
-  //             return res.redirect('/users/sign-in');
-  //         });
-  //       } else {
-  //         return res.redirect('back');
-  //       }
-  //     }
-  //   );
+        return res.redirect("/users/sign-in");
+      });
+    } else {
+      return res.redirect("back");
+    }
+  });
 };
 
 // Sign In for create session
+// module.exports.createSession = function (req, res) {
+//   User.findOne({ email: req.body.email }, (err, user) => {
+//     // res.cookies("user_id", user.id);
+//     if (err) {
+//       console.log("error"), err;
+//     }
+
+//     if (user) {
+//       if (user.password != req.body.password) {
+//         return res.redirect("back");
+//       }
+//       // res.cookies('user_id', user.id);
+//       // res.cookies.user("user_id", user.id);
+//       return res.redirect("/users/profile");
+//     } else {
+//       return res.redirect("back");
+//     }
+//   });
+// };
+
 module.exports.createSession = function (req, res) {
-    
+  return res.redirect("/");
+};
+
+module.exports.destroSession = function (req, res) {
+  req.logout(function (err) {
+    if (err) {
+      console.log(err);
+    }
+    return res.redirect("/users/sign-in");
+  });
 };
