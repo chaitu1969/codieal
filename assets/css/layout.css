@@ -1,5 +1,13 @@
 body {
   margin: 0px;
   text-align: center;
-  background-color: rgb(244, 239, 218);
+  background-color: #f4efda;
+}
+
+body {
+  margin: 0;
+}
+
+body #layout-main {
+  height: 100%;
 }

@@ -2,10 +2,27 @@
   <head>
     <title><%= title %></title>
     <link rel="stylesheet" href="/css/layout.css" />
+    <link rel="stylesheet" href="/css/header.css" />
+    <link rel="stylesheet" href="/css/footer.css" />
     <%- style %>
   </head>
 
-  <%- include('_header.ejs'); %>
-   <%- body %> 
-   <%- include('_footer'); %>
+  <body>
+    <header id="'header-tag">
+      
+      <%- include('_header.ejs'); %> 
+
+    </header>
+    
+
+    <main id = 'layout-main'>
+
+      <%- body %> 
+
+    </main>
+    
+    
+    
+    <%- include('_footer'); %>
+  </body>
 </html>
