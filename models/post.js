@@ -6,9 +6,13 @@ const postSchema = new mongoose.Schema({
         require: true
     },
     user: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
+       type: mongoose.Schema.Types.ObjectId,
+       reference: 'User'
         
+    },
+    comments: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'comment'
     }
     
 }, {

@@ -1,9 +1,53 @@
 <h1>Codeial / <%= title %></h1>
-
 <section id="feed-posts">
-    <h4>Posts</h4>
-    <form action="" id="new-post-form" method="POST">
-        <textarea name="content" id="" cols="30" rows="3" placeholder="Please type here...."></textarea>
+
+    <form action="/posts/create" id="new-post-form" method="POST">
+        <textarea name="content" id="" cols="30" rows="3" placeholder="type here...."></textarea>
         <input type="submit" value="post">
     </form>
+
+
+    <h2><%= posts.name %></h2>
+
+
+
+    <div id="posts-list-container">
+
+        <ul>
+            <% for(post of posts){ %>
+
+                <li>
+                    <%= locals.user %>
+                    <br>
+
+                    <p>
+                        <% if(locals.user && locals.user.id == post.user.id) { %>
+
+                    <small>
+                        <a href="/posts/destroy/<%= post.id %>"> Delete </a>
+                    </small>
+                    <% } %>
+                    <br>
+                    <h4><%- post.user %></h4>
+                    <small>
+                       <%= post %> 
+                    </small>
+
+                   </p>
+
+                    <div class="post-comments">
+                            <form action="/comments/create" method="PSOT">
+                                <input type="text" name="content" placeholder="Type here to add comment">
+                                <input type="hidden" name="post" value="<%= post._id %>">
+                                <input type="submit" value="Add comment">
+                            </form>
+
+                           
+                    </div>
+                </li>
+
+                <% } %>
+        </ul>
+
+    </div>
 </section>
