@@ -2,10 +2,18 @@ const { model } = require("mongoose");
 const User = require("../models/user");
 // const { use } = require("../routes");
 
+User.findOneAndUpdate
+
 module.exports.profile = function (req, res) {
-  return res.render("user_profile", {
-    title: "User Profile",
+  User.findById(req.params.id, function(err, user){
+
+    return res.render("user_profile", {
+      title: "User Profile",
+      profile_user: user
+    });
+
   });
+  
 };
 
 // Render the sign in page

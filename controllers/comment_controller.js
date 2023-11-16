@@ -17,5 +17,20 @@ module.exports.create = function(req,res) {
                 res.redirect('/');
             })
         }
-    })
+    });
+
+}
+
+module.exports.destroy = function(req,res){
+    comment.findById(req.params.id, function(err,comment){
+        if(comment.user == req.user.id){
+            let postId = comment.post;
+
+            comment.remove();
+
+            post.findByIdAndUpdate(postId,{$pull: req.params.id},function(err,post){
+                return redirect('back');
+            })
+        }
+    });
 }
